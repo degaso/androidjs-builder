@@ -32,9 +32,9 @@ const admZip = require('adm-zip');
  */
 export class Webview implements Interfaces.IBuilderModule {
     env: Interfaces.IEnv;
-    user: string = 'android-js';
+    user: string = 'degaso';
     sdk: Interfaces.IGithubRepoLink = {
-        user: 'android-js',
+        user: 'degaso',
         repo: 'androidjs-sdk'
     };
     example: Interfaces.IGithubRepoLink = {
