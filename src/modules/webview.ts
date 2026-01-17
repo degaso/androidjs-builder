@@ -72,6 +72,7 @@ export class Webview implements Interfaces.IBuilderModule {
         },
         activity: {
             'android:configChanges':"keyboard|keyboardHidden|orientation|screenSize",
+            'android:launchMode': 'singleTask',
             'android:name':"com.android.js.webview.MainActivity"
         }
     }

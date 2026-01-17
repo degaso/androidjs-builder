@@ -73,6 +73,7 @@ export class StaticApp extends Webview {
         },
         activity: {
             'android:configChanges':"keyboard|keyboardHidden|orientation|screenSize",
+            'android:launchMode': 'singleTask',
             'android:name':"com.android.js.staticsdk.MainActivity"
         }
     }
