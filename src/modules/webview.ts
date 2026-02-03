@@ -345,6 +345,20 @@ export class Webview implements Interfaces.IBuilderModule {
             fs.removeSync(path.join(myappFolder, 'dist'))
         }
 
+        if (this.env.project.package['exclude-files'] != undefined) {
+            for(let excludeFile of this.env.project.package['exclude-files']) {
+                try {
+                    let excludeFilePath = path.join(myappFolder, excludeFile);
+                    if(fs.existsSync(excludeFilePath)){
+                        console.log(`removing excluded file/folder: ${excludeFile}`);
+                        fs.removeSync(excludeFilePath);
+                    }
+                } catch (e) {
+                    console.log(`failed to exclude file/folder: ${excludeFile}`, e.message);
+                }
+            }
+        }
+
         // adding permissions
         let permissions = [];
         if (this.env.project.package.permission) {

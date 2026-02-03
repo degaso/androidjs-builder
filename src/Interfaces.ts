@@ -49,6 +49,7 @@ export namespace Interfaces {
         'app-name': string
         permission: Array<string>
         'deep-link': Array<IDeepLink>
+        'exclude-files'?: Array<string> | undefined
     }
     export interface IDeepLink {
         scheme: string,

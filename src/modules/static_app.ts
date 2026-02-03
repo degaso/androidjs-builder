@@ -1,26 +1,26 @@
 import '../Interfaces';
-import {Interfaces} from '../Interfaces';
+import { Interfaces } from '../Interfaces';
 import * as path from 'path';
-import {getDownloadLink, getFileDownloadLink} from '../GitListDir';
+import { getDownloadLink, getFileDownloadLink } from '../GitListDir';
 
 const request = require('request');
 
 
 import * as fs from 'fs-extra';
-import {spawn} from 'child_process';
-import {getManifest} from './Html/ManifestBuilder';
-import {updateIcon} from './Html/updateIcon';
-import {updateAppName} from './Html/updateAppName';
-import {createIfNotExist} from './Html/createIfNotExist';
-import {downloadGithubFile} from './Html/downloadGithubFile';
-import {downloadGithubRepo} from './Html/downloadGithubRepo';
-import {LoadingBar} from './Html/ProgressBar';
-import {javaVersion} from './Html/getJavaVersion';
-import {getUpdate, getUpdateMessage} from './Html/checkForUpdates';
-import {updateTheme} from "./Html/updateAppTheme";
-import {updateApkVersion} from './Html/updateApkVersion';
+import { spawn } from 'child_process';
+import { getManifest } from './Html/ManifestBuilder';
+import { updateIcon } from './Html/updateIcon';
+import { updateAppName } from './Html/updateAppName';
+import { createIfNotExist } from './Html/createIfNotExist';
+import { downloadGithubFile } from './Html/downloadGithubFile';
+import { downloadGithubRepo } from './Html/downloadGithubRepo';
+import { LoadingBar } from './Html/ProgressBar';
+import { javaVersion } from './Html/getJavaVersion';
+import { getUpdate, getUpdateMessage } from './Html/checkForUpdates';
+import { updateTheme } from "./Html/updateAppTheme";
+import { updateApkVersion } from './Html/updateApkVersion';
 
-import {Webview} from './webview';
+import { Webview } from './webview';
 
 
 const chalk = require('chalk');
@@ -57,24 +57,24 @@ export class StaticApp extends Webview {
 
     // ManifistBuilder args
     manifist = {
-        platformBuildVersionCode : "30",
-        platformBuildVersionName : "11",
+        platformBuildVersionCode: "30",
+        platformBuildVersionName: "11",
         application: {
-            'android:allowBackup':"true",
-            'android:appComponentFactory':"androidx.core.app.CoreComponentFactory",
-            'android:debuggable':"false",
-            'android:icon':"@mipmap/ic_launcher",
-            'android:label':"@string/app_name",
-            'android:roundIcon':"@mipmap/ic_launcher_round",
-            'android:supportsRtl':"true",
-            'android:theme':"@style/AppTheme",
+            'android:allowBackup': "true",
+            'android:appComponentFactory': "androidx.core.app.CoreComponentFactory",
+            'android:debuggable': "false",
+            'android:icon': "@mipmap/ic_launcher",
+            'android:label': "@string/app_name",
+            'android:roundIcon': "@mipmap/ic_launcher_round",
+            'android:supportsRtl': "true",
+            'android:theme': "@style/AppTheme",
             'android:usesCleartextTraffic': "true",
-            'android:requestLegacyExternalStorage':"true"
+            'android:requestLegacyExternalStorage': "true"
         },
         activity: {
-            'android:configChanges':"keyboard|keyboardHidden|orientation|screenSize",
+            'android:configChanges': "keyboard|keyboardHidden|orientation|screenSize",
             'android:launchMode': 'singleTask',
-            'android:name':"com.android.js.staticsdk.MainActivity"
+            'android:name': "com.android.js.staticsdk.MainActivity"
         }
     }
 
@@ -94,7 +94,7 @@ export class StaticApp extends Webview {
 
         console.log("--release=", env.release)
         this.manifist.application["android:debuggable"] = (!env.release).toString()
-        
+
 
         // check if sdk folder exist
         // if (this.env.builder.debug) {
@@ -181,16 +181,16 @@ export class StaticApp extends Webview {
             downloadsdk({
                 url: getDownloadLink(this.example.user, this.example.repo),
                 repo: this.example.repo,
-                targetFolder: path.join( this.env.builder.cache, '..', 'examples'),
-                targetZip: path.join( this.env.builder.cache, '..', 'examples', this.example.repo + ".zip"),
+                targetFolder: path.join(this.env.builder.cache, '..', 'examples'),
+                targetZip: path.join(this.env.builder.cache, '..', 'examples', this.example.repo + ".zip"),
                 zipFolder: this.example.repo + '-master/',
                 retry: 3
-            }, (error)=>{
+            }, (error) => {
                 // creating project
 
-                if(error){
+                if (error) {
                     console.log(error);
-                }else {
+                } else {
                     if (this.env.builder.debug)
                         console.log('Creating Project...');
                     fs.copySync(exampleFolderPath, projectPath);
@@ -201,7 +201,7 @@ export class StaticApp extends Webview {
                     console.log(`$npm run build`);
                 }
             });
-        }else {
+        } else {
             if (this.env.builder.debug)
                 console.log('Creating Project...');
             fs.copySync(exampleFolderPath, projectPath);
@@ -220,8 +220,8 @@ export class StaticApp extends Webview {
 
         /// generating package.json
         const _package = require(path.join(projectPath, 'package.json'));
-        
-        if(_package['scripts'] === undefined) _package['scripts'] = {};
+
+        if (_package['scripts'] === undefined) _package['scripts'] = {};
         _package.name = this.env.project.name;
         _package['app-name'] = this.env.project.name;
         _package['project-type'] = this.env.project.type;
@@ -236,12 +236,12 @@ export class StaticApp extends Webview {
 
     }
 
-    downloadSDK(callback, force:boolean=false) {
+    downloadSDK(callback, force: boolean = false) {
         const sdkZip = path.join(this.env.builder.cache, this.sdk.repo + '.zip');
         const sdkFolder = path.join(this.env.builder.cache, this.sdk.repo);
 
 
-        if ( !force && fs.existsSync(sdkFolder)) {
+        if (!force && fs.existsSync(sdkFolder)) {
             callback();
         } else {
             console.log(getDownloadLink(this.sdk.user, this.sdk.repo))
@@ -346,8 +346,22 @@ export class StaticApp extends Webview {
         }
 
         // removing dist folder from copied filed if exist.
-        if(fs.existsSync(path.join(myappFolder, 'dist'))){
+        if (fs.existsSync(path.join(myappFolder, 'dist'))) {
             fs.removeSync(path.join(myappFolder, 'dist'))
+        }
+
+        if (this.env.project.package['exclude-files'] != undefined) {
+            for (let excludeFile of this.env.project.package['exclude-files']) {
+                try {
+                    let excludeFilePath = path.join(myappFolder, excludeFile);
+                    if (fs.existsSync(excludeFilePath)) {
+                        console.log(`removing excluded file/folder: ${excludeFile}`);
+                        fs.removeSync(excludeFilePath);
+                    }
+                } catch (e) {
+                    console.log(`failed to exclude file/folder: ${excludeFile}`, e.message);
+                }
+            }
         }
 
         // adding permissions
@@ -392,7 +406,7 @@ export class StaticApp extends Webview {
         callback();
     }
 
-    
+
     rebuildApk(callback) {
         const progress = new LoadingBar();
 
@@ -404,10 +418,10 @@ export class StaticApp extends Webview {
         const cacheFolderPath = this.env.builder.cache;
         const buildApkFilePath = path.join(this.env.builder.cache, this.env.project.package.name + '.apk');
 
-        let sdkConfig:any = {};
+        let sdkConfig: any = {};
         try {
             sdkConfig = require(path.join(sdkFolderPath, 'config.json'));
-        }catch (e) {
+        } catch (e) {
             ///..
         }
 
@@ -418,11 +432,11 @@ export class StaticApp extends Webview {
 
 
         let args_ = ['-jar', apkToolFilePath, 'b', sdkFolderPath, '-o', buildApkFilePath, '--frame-path', cacheFolderPath];
-        const proc = spawn('java', args_, {cwd: cacheFolderPath});
+        const proc = spawn('java', args_, { cwd: cacheFolderPath });
 
         let log = "";
 
-        if(sdkConfig.version){
+        if (sdkConfig.version) {
             console.log(`Using SDK: ${sdkConfig.version}`);
         }
         console.log("Building Apk ...");
@@ -458,7 +472,7 @@ export class StaticApp extends Webview {
                     progress.clear();
                     callback();
                 } else {
-                    progress.stop({message: 'non zero exit code: failed to build apk'});
+                    progress.stop({ message: 'non zero exit code: failed to build apk' });
                     console.error(log);
                     process.exit();
                 }
@@ -560,7 +574,7 @@ export class StaticApp extends Webview {
                             });
                         });
                     });
-                }, this.env.force||false);
+                }, this.env.force || false);
 
                 // });
             }
@@ -581,7 +595,7 @@ export class StaticApp extends Webview {
 
         let args_: Array<string> = ['-jar', apksigner_path, '--apks', apk_file_path];
 
-        if(this.env.release === false) {
+        if (this.env.release === false) {
             args_.push('--debug');
             console.log("Generating apk in debug mode. use '--release' to generate release build");
         } else {
@@ -589,7 +603,7 @@ export class StaticApp extends Webview {
         }
 
         // @ts-ignore
-        const proc = spawn('java', args_, {cwd: build_working_dir});
+        const proc = spawn('java', args_, { cwd: build_working_dir });
         proc.stdout.on('data', data => {
             if (progress.isRunning === false) {
                 progress.message = 'signing ...';
@@ -600,7 +614,7 @@ export class StaticApp extends Webview {
         });
 
         proc.stderr.on('data', (data) => {
-            progress.stop({message: 'error on signing apk'});
+            progress.stop({ message: 'error on signing apk' });
             if (this.env.builder.debug) {
                 console.log(`${data}`);
             }
@@ -610,14 +624,14 @@ export class StaticApp extends Webview {
         proc.on('close', (code) => {
             if (code === 0) { // process exit successfully
                 progress.stop();
-                if(this.env.release) {
+                if (this.env.release) {
                     /// TODO: -
                     console.log(chalk.green(` Resign the apk with your own private keystore.`));
                     // console.log(`$ java -jar ${apksigner_path} -a ./dist/${this.env.project.package.name}.apk --ks <my-key.keystore> --ksAlias <alias_name> --allowResign`);
                 }
                 callback();
             } else {
-                progress.stop({message: "failed to sign apk", code});
+                progress.stop({ message: "failed to sign apk", code });
                 process.exit(); // exit process instead of invoking callback
             }
 
@@ -663,16 +677,16 @@ function downloadsdk(args: downloadGithubArgs, callback) {
         progress: new LoadingBar()
     };
     request
-        .get({url: args.url, headers: {'User-Agent': 'request'}})
+        .get({ url: args.url, headers: { 'User-Agent': 'request' } })
         .on('response', response => {
             state.responseCode = response.statusCode;
             if (response.statusCode === 200) {
                 //@ts-ignore
-                if(args.recursive){
+                if (args.recursive) {
                     console.log(`re-trying`);
                     state.progress.message = "Downloading:";
                     state.progress.start();
-                }else {
+                } else {
                     console.log("Downloading:", args.url);
                     state.progress.message = "Downloading:";
                     state.progress.start();
@@ -685,11 +699,11 @@ function downloadsdk(args: downloadGithubArgs, callback) {
             state.progress.message = `Data: `;
         })
         .on('error', error => {
-            if(state.responseCode === null){
+            if (state.responseCode === null) {
                 console.log(`Failed to download: ${args.url},\nCheck your internet connection`);
                 // console.log(chalk.green(`You can manually update Androidjs-sdk by downloading from: \n[${args.url}] \nand extracting it to: [${path.join(args.targetFolder, args.repo)}]`));
             } else {
-                state.progress.stop({message: `Failed to download: ${args.url}`});
+                state.progress.stop({ message: `Failed to download: ${args.url}` });
                 console.log(error);
             }
         })
@@ -709,13 +723,13 @@ function downloadsdk(args: downloadGithubArgs, callback) {
                 callback();
             } catch (e) {
                 if (args.retry > 0) {
-                    state.progress.stop({message: "failed to download, retrying.."});
+                    state.progress.stop({ message: "failed to download, retrying.." });
                     //@ts-ignore
-                    downloadsdk({...args, recursive: true}, callback);
+                    downloadsdk({ ...args, recursive: true }, callback);
                 } else {
-                    state.progress.stop({message: "Failed to download"});
+                    state.progress.stop({ message: "Failed to download" });
                     console.error(e);
-                    callback({message: "failed to download"});
+                    callback({ message: "failed to download" });
                 }
             }
         })

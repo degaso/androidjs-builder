@@ -2,11 +2,9 @@ node_modules/
 npm-debug.log
 
 coverage/
-dist/
 
 !.vscode/
 test/
-dist/
 .idea/
 TEST_FOLDER/
 package-lock.json
