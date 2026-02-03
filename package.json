@@ -54,10 +54,5 @@
     "type": "git",
     "url": "git@github.com:deveshpankaj/androidjs-builder"
   },
-  "files": [
-    "dist",
-    "package.json",
-    "tsconfig.json"
-  ],
   "keywords": []
 }
